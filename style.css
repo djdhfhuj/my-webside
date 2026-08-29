@@ -1,0 +1,240 @@
+body {
+    background-color: #0f1117;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+}
+
+h1 {
+    font-size: 48px;
+    margin-top: 80px;
+}
+
+p {
+    color: #a9afbd;
+    font-size: 18px;
+}
+
+button {
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.navbar {
+    height: 70px;
+    background-color: #161922;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: #a9afbd;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+button:hover {
+    background-color: #4752c4;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background: #050509;
+}
+
+.navbar,
+main {
+    position: relative;
+    z-index: 2;
+}
+
+.grid {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    left: -50%;
+    top: 35%;
+
+    background-image:
+        linear-gradient(#ff00ff22 1px, transparent 1px),
+        linear-gradient(90deg, #00ffff22 1px, transparent 1px);
+
+    background-size: 50px 50px;
+
+    transform:
+        perspective(400px)
+        rotateX(60deg)
+        translate(
+            var(--mouse-x, 0px),
+            var(--mouse-y, 0px)
+        );
+
+    transform-origin: center top;
+
+    animation: gridMove 6s linear infinite;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #00ffff;
+    box-shadow:
+        0 0 5px #00ffff,
+        0 0 15px #00ffff,
+        0 0 30px #00ffff;
+    animation: cyberParticle 7s linear infinite;
+}
+
+.particle1 {
+    left: 10%;
+    top: 90%;
+    animation-duration: 6s;
+}
+
+.particle2 {
+    left: 20%;
+    top: 70%;
+    animation-duration: 9s;
+}
+
+.particle3 {
+    left: 35%;
+    top: 85%;
+    animation-duration: 7s;
+}
+
+.particle4 {
+    left: 50%;
+    top: 60%;
+    animation-duration: 11s;
+}
+
+.particle5 {
+    left: 65%;
+    top: 80%;
+    animation-duration: 8s;
+}
+
+.particle6 {
+    left: 75%;
+    top: 50%;
+    animation-duration: 10s;
+}
+
+.particle7 {
+    left: 85%;
+    top: 75%;
+    animation-duration: 6s;
+}
+
+.particle8 {
+    left: 95%;
+    top: 90%;
+    animation-duration: 12s;
+}
+
+@keyframes cyberParticle {
+
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
+
+}
+
+.neon-line {
+    position: absolute;
+    width: 400px;
+    height: 2px;
+    background: #ff00ff;
+    box-shadow:
+        0 0 5px #ff00ff,
+        0 0 15px #ff00ff,
+        0 0 30px #ff00ff;
+    opacity: 0.7;
+    transform: rotate(-25deg);
+    animation: neonMove 5s linear infinite;
+}
+
+.line1 {
+    top: 30%;
+    left: -400px;
+}
+
+.line2 {
+    top: 70%;
+    left: -600px;
+    animation-delay: 2.5s;
+}
+
+@keyframes neonMove {
+
+    0% {
+        left: -500px;
+    }
+
+    100% {
+        left: 120%;
+    }
+
+}
+
+.cursor-glow {
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: #00ffff;
+    filter: blur(100px);
+    opacity: 0.15;
+
+    pointer-events: none;
+
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
