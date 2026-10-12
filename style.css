@@ -1,240 +1,676 @@
-body {
-    background-color: #0f1117;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-}
 
-h1 {
-    font-size: 48px;
-    margin-top: 80px;
-}
-
-p {
-    color: #a9afbd;
-    font-size: 18px;
-}
-
-button {
-    background-color: #5865f2;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.navbar {
-    height: 70px;
-    background-color: #161922;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
+* {
     box-sizing: border-box;
 }
 
+:root {
+    color-scheme: dark;
+    --bg: #070b16;
+    --panel: #111827;
+    --text: #e5f3ff;
+    --muted: #9aabc0;
+    --cyan: #22d3ee;
+    --purple: #8b5cf6;
+    --border: rgba(148, 163, 184, 0.2);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at top left, #172554 0, transparent 40%),
+        radial-gradient(ellipse at bottom right, #312e81 0, transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+.upload-button {
+    font: inherit;
+}
+
+.app {
+    width: min(1100px, 100%);
+    margin: auto;
+    padding: 28px 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
 .logo {
-    font-size: 24px;
+    color: var(--cyan);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+.tagline,
+.intro p,
+.hint,
+.note,
+.footer,
+.or-text {
+    color: var(--muted);
+}
+
+.tagline {
+    margin-top: 8px;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.intro h1 {
+    font-size: clamp(27px, 4vw, 40px);
+    margin-bottom: 10px;
+}
+
+.intro h1 {
+    background: linear-gradient(90deg, var(--cyan), #c4b5fd);
+    color: transparent;
+    background-clip: text;
+}
+
+.explorer {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 22px;
+}
+
+.photo-panel,
+.color-panel {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: rgba(17, 24, 39, 0.92);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
+}
+
+.photo-panel h2,
+.color-panel h2 {
+    margin-top: 0;
+}
+
+.camera-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+button,
+.upload-button {
+    padding: 11px 15px;
+    border: 1px solid rgba(34, 211, 238, 0.45);
+    border-radius: 9px;
+    background: #172554;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+}
+
+button:hover:not(:disabled),
+.upload-button:hover {
+    background: #164e63;
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+button:focus-visible,
+.upload-button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+}
+
+#cameraVideo {
+    display: none;
+    width: 100%;
+    max-height: 340px;
+    object-fit: contain;
+    background: #020617;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.or-text {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.upload-button {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+#photoInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+#photoInput:focus-visible + .image-container {
+    outline: 2px solid var(--cyan);
+}
+
+.image-container {
+    min-height: 180px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px dashed #475569;
+    border-radius: 12px;
+    background: #080e1c;
+}
+
+#placeholder {
+    padding: 20px;
+    color: var(--muted);
+    text-align: center;
+}
+
+.photo-stage {
+    display: none;
+    position: relative;
+    width: 100%;
+    line-height: 0;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+#photoCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 450px;
+    object-fit: contain;
+    cursor: crosshair;
+}
+
+#faceOverlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.hint {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#cameraStatus {
+    color: var(--cyan);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.color-preview {
+    width: 100%;
+    height: 110px;
+    margin: 18px 0;
+    border: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    background: #20283a;
+    transition: background-color 0.2s;
+}
+
+#colorName {
     font-weight: bold;
 }
 
-.nav-links {
+#rgbValue,
+#hexValue {
+    color: #cbd5e1;
+    overflow-wrap: anywhere;
+}
+
+.spectrum,
+.popup-spectrum {
+    position: relative;
+    height: 17px;
+    margin-top: 16px;
+    border-radius: 30px;
+    background: linear-gradient(
+        to right,
+        #f5d9c5,
+        #d9aa85,
+        #b17a57,
+        #805039,
+        #351c15
+    );
+}
+
+#spectrumMarker {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 5px;
+    height: 27px;
+    border: 1px solid white;
+    border-radius: 4px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    transform: translateX(-50%);
+}
+
+.spectrum-labels,
+.popup-spectrum-labels {
     display: flex;
-    gap: 30px;
+    justify-content: space-between;
+    margin-top: 9px;
+    color: var(--muted);
+    font-size: 12px;
 }
 
-.nav-links a {
-    color: #a9afbd;
-    text-decoration: none;
-    font-size: 16px;
+.note {
+    margin-top: 24px;
+    font-size: 13px;
+    line-height: 1.7;
 }
 
-.nav-links a:hover {
-    color: white;
+.footer {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 13px;
 }
 
-button:hover {
-    background-color: #4752c4;
-}
-
-.background {
+/* Success popup */
+.success-popup {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-    background: #050509;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(6px);
 }
 
-.navbar,
-main {
+.success-popup[hidden] {
+    display: none;
+}
+
+.popup-card {
+    position: relative;
+    width: min(100%, 380px);
+    padding: 25px;
+    border: 1px solid var(--cyan);
+    border-radius: 18px;
+    background: #111827;
+    box-shadow: 0 0 35px rgba(34, 211, 238, 0.18);
+}
+
+.popup-card h2 {
+    padding-right: 22px;
+    color: var(--cyan);
+    font-size: 23px;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    font-size: 27px;
+}
+
+.popup-color-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0;
+}
+
+.popup-color-swatch {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border: 2px solid white;
+    border-radius: 12px;
+}
+
+#popupColorLevel {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.popup-spectrum {
+    margin-top: 20px;
+}
+
+#popupSpectrumMarker {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 5px;
+    height: 27px;
+    border: 1px solid white;
+    border-radius: 4px;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    transform: translateX(-50%);
+}
+
+@media (max-width: 760px) {
+    .explorer {
+        grid-template-columns: 1fr;
+    }
+
+    .app {
+        padding: 20px 14px;
+    }
+
+    .photo-panel,
+    .color-panel {
+        padding: 18px;
+    }
+
+    .camera-controls button {
+        flex: 1 1 auto;
+    }
+}
+
+/* ===== COOL NEON BUTTONS ===== */
+
+button,
+.upload-button {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #22d3ee;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #172554, #312e81);
+    color: #f0fdff;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.12);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+button:hover:not(:disabled),
+.upload-button:hover {
+    transform: translateY(-3px);
+    border-color: #a5f3fc;
+    background: linear-gradient(135deg, #0891b2, #6d28d9);
+    box-shadow:
+        0 0 12px rgba(34, 211, 238, 0.55),
+        0 0 28px rgba(139, 92, 246, 0.25);
+}
+
+button:active:not(:disabled),
+.upload-button:active {
+    transform: translateY(0) scale(0.97);
+}
+
+button:disabled {
+    box-shadow: none;
+    filter: grayscale(0.5);
+}
+
+/* Make the primary camera button stand out */
+#startCamera {
+    background: linear-gradient(135deg, #0891b2, #4f46e5);
+}
+
+#capturePhoto {
+    background: linear-gradient(135deg, #7c3aed, #be185d);
+    border-color: #c084fc;
+}
+
+#stopCamera {
+    background: linear-gradient(135deg, #7f1d1d, #9f1239);
+    border-color: #fb7185;
+}
+
+/* ===== POPUP BACKDROP ===== */
+
+.success-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    overflow-y: auto;
+    background: rgba(2, 6, 23, 0.86);
+    backdrop-filter: blur(10px);
+}
+
+.success-popup[hidden] {
+    display: none;
+}
+
+/* ===== LEVEL CARD ===== */
+
+.popup-card {
+    position: relative;
+    width: min(100%, 390px);
+    padding: 30px 25px;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid rgba(34, 211, 238, 0.8);
+    border-radius: 24px;
+    background:
+        radial-gradient(ellipse at top, #1e1b4b, transparent 60%),
+        #0b1224;
+    box-shadow:
+        0 0 25px rgba(34, 211, 238, 0.18),
+        0 0 65px rgba(139, 92, 246, 0.12);
+    animation: popupAppear 0.4s ease-out;
+}
+
+@keyframes popupAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 15px;
+    border: 1px solid #22d3ee;
+    border-radius: 16px;
+    background: rgba(34, 211, 238, 0.1);
+    color: #67e8f9;
+    font-size: 30px;
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+}
+
+.popup-eyebrow {
+    margin: 0 0 12px;
+    color: #67e8f9;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+.popup-card h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.popup-level-number {
+    margin: 4px 0;
+    background: linear-gradient(180deg, #ffffff, #67e8f9 55%, #818cf8);
+    color: transparent;
+    background-clip: text;
+    font-size: clamp(80px, 20vw, 110px);
+    font-weight: 1000;
+    line-height: 1.15;
+    text-shadow: 0 0 30px rgba(34, 211, 238, 0.18);
+}
+
+.popup-color-level {
+    display: inline-block;
+    margin: 8px 0 22px;
+    padding: 9px 16px;
+    border: 1px solid rgba(34, 211, 238, 0.4);
+    border-radius: 30px;
+    background: rgba(34, 211, 238, 0.08);
+    color: #a5f3fc;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.close-popup {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 25px;
+}
+
+.popup-color-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    margin: 0 0 20px;
+}
+
+.popup-color-swatch {
+    width: 48px;
+    height: 48px;
+    border: 2px solid white;
+    border-radius: 12px;
+    background: #64748b;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.1);
+}
+
+.swatch-caption {
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.popup-spectrum {
+    position: relative;
+    height: 12px;
+    margin-top: 12px;
+    border-radius: 30px;
+    background: linear-gradient(
+        to right,
+        #f5d9c5,
+        #d9aa85,
+        #b17a57,
+        #805039,
+        #351c15
+    );
+}
+
+#popupSpectrumMarker {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    width: 5px;
+    height: 22px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background: #22d3ee;
+    box-shadow: 0 0 12px #22d3ee;
+    transform: translateX(-50%);
+}
+
+.popup-spectrum-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 9px;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.popup-note {
+    margin: 22px 0;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.popup-done {
+    width: 100%;
+    padding: 14px 20px;
+    border-color: #67e8f9;
+    background: linear-gradient(90deg, #0891b2, #6d28d9);
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .popup-card {
+        animation: none;
+    }
+
+    button,
+    .upload-button {
+        transition: none;
+    }
+}
+
+/* 1. Make the color level number extra-large */
+.popup-level-number {
+    font-size: clamp(100px, 24vw, 140px);
+    font-weight: 900;
+    line-height: 1.1;
+    transition: transform 0.2s ease;
+}
+
+/* 2. Make the close button easy to click */
+.close-popup {
     position: relative;
     z-index: 2;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    cursor: pointer;
+    pointer-events: auto;
 }
 
-.grid {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    left: -50%;
-    top: 35%;
-
-    background-image:
-        linear-gradient(#ff00ff22 1px, transparent 1px),
-        linear-gradient(90deg, #00ffff22 1px, transparent 1px);
-
-    background-size: 50px 50px;
-
-    transform:
-        perspective(400px)
-        rotateX(60deg)
-        translate(
-            var(--mouse-x, 0px),
-            var(--mouse-y, 0px)
-        );
-
-    transform-origin: center top;
-
-    animation: gridMove 6s linear infinite;
-}
-
-.particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #00ffff;
-    box-shadow:
-        0 0 5px #00ffff,
-        0 0 15px #00ffff,
-        0 0 30px #00ffff;
-    animation: cyberParticle 7s linear infinite;
-}
-
-.particle1 {
-    left: 10%;
-    top: 90%;
-    animation-duration: 6s;
-}
-
-.particle2 {
-    left: 20%;
-    top: 70%;
-    animation-duration: 9s;
-}
-
-.particle3 {
-    left: 35%;
-    top: 85%;
-    animation-duration: 7s;
-}
-
-.particle4 {
-    left: 50%;
-    top: 60%;
-    animation-duration: 11s;
-}
-
-.particle5 {
-    left: 65%;
-    top: 80%;
-    animation-duration: 8s;
-}
-
-.particle6 {
-    left: 75%;
-    top: 50%;
-    animation-duration: 10s;
-}
-
-.particle7 {
-    left: 85%;
-    top: 75%;
-    animation-duration: 6s;
-}
-
-.particle8 {
-    left: 95%;
-    top: 90%;
-    animation-duration: 12s;
-}
-
-@keyframes cyberParticle {
-
-    0% {
-        transform: translateY(0) scale(0.5);
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 1;
-    }
-
-    80% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
-    }
-
-}
-
-.neon-line {
-    position: absolute;
-    width: 400px;
-    height: 2px;
-    background: #ff00ff;
-    box-shadow:
-        0 0 5px #ff00ff,
-        0 0 15px #ff00ff,
-        0 0 30px #ff00ff;
-    opacity: 0.7;
-    transform: rotate(-25deg);
-    animation: neonMove 5s linear infinite;
-}
-
-.line1 {
-    top: 30%;
-    left: -400px;
-}
-
-.line2 {
-    top: 70%;
-    left: -600px;
-    animation-delay: 2.5s;
-}
-
-@keyframes neonMove {
-
-    0% {
-        left: -500px;
-    }
-
-    100% {
-        left: 120%;
-    }
-
-}
-
-.cursor-glow {
-    position: fixed;
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    background: #00ffff;
-    filter: blur(100px);
-    opacity: 0.15;
-
-    pointer-events: none;
-
-    transform: translate(-50%, -50%);
-    left: 50%;
-    top: 50%;
+.close-popup:hover {
+    transform: rotate(90deg);
 }
