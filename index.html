@@ -1,51 +1,138 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>GameInformation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIGA EXPLORER</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <div class="app">
+        <header class="header">
+            <div class="logo">✦ NIGA EXPLORER</div>
+            <p class="tagline">Discover the colors around you.</p>
+        </header>
 
-<div class="background">
+        <main class="main-content">
+            <section class="intro">
+                <h1>Explore your color spectrum</h1>
+                <p>Use your webcam or upload a photo to explore your niga colors level.</p>
+            </section>
 
-    <div class="cursor-glow"></div>
+            <section class="explorer">
+                <div class="photo-panel">
+                    <h2>Camera &amp; Photo</h2>
 
-    <div class="grid"></div>
+                    <div class="camera-controls">
+                        <button id="startCamera">Start Camera</button>
+                        <button id="capturePhoto" disabled>Capture Photo</button>
+                        <button id="stopCamera" disabled>Stop Camera</button>
+                    </div>
 
-    <div class="particle particle1"></div>
-    <div class="particle particle2"></div>
-    <div class="particle particle3"></div>
-    <div class="particle particle4"></div>
-    <div class="particle particle5"></div>
-    <div class="particle particle6"></div>
-    <div class="particle particle7"></div>
-    <div class="particle particle8"></div>
+                    <video id="cameraVideo" autoplay playsinline></video>
 
-    <div class="neon-line line1"></div>
-    <div class="neon-line line2"></div>
+                    <p class="or-text">— or upload a photo —</p>
 
-</div>
+                    <label for="photoInput" class="upload-button">
+                        Choose a photo
+                    </label>
+                    <input type="file" id="photoInput" accept="image/*">
 
-        <div class="nav-links">
-            <a href="#">Games</a>
-            <a href="#">Categories</a>
-            <a href="#">About</a>
+                    <div class="image-container">
+                        <p id="placeholder">
+                            Your captured or uploaded photo will appear here.
+                        </p>
+
+                        <div class="photo-stage">
+                            <canvas id="photoCanvas"></canvas>
+                            <canvas id="faceOverlay"></canvas>
+                        </div>
+                    </div>
+
+                    <p class="hint">
+                        Capture a photo, then select any point to explore its color.
+                    </p>
+
+                    <p id="cameraStatus" role="status" aria-live="polite">
+                        Camera is off.
+                    </p>
+                </div>
+
+                <div class="color-panel">
+                    <h2>Color Explorer</h2>
+
+                    <div id="colorPreview" class="color-preview"></div>
+                    <p id="colorName">No color selected yet</p>
+                    <p id="rgbValue">RGB: —</p>
+                    <p id="hexValue">HEX: —</p>
+
+                    <h3>Light-to-dark spectrum</h3>
+                    <div class="spectrum">
+                        <div id="spectrumMarker"></div>
+                    </div>
+
+                    <div class="spectrum-labels">
+                        <span>Lighter</span>
+                        <span>Darker</span>
+                    </div>
+
+                    <p class="note">
+                        Lighting, shadows, and camera settings affect sampled colors.
+                        This tool explores colors; it does not judge or rank people.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            Your photo is processed locally in this version.
+        </footer>
+    </div>
+
+<!-- Cool neon success popup -->
+<div id="successPopup" class="success-popup" hidden>
+    <section class="popup-card" role="dialog"
+             aria-modal="true" aria-labelledby="popupTitle">
+
+        <button id="closePopup" class="close-popup"
+                aria-label="Close popup">×</button>
+
+        <div class="popup-icon">✦</div>
+
+        <p class="popup-eyebrow">COLOR SCAN COMPLETE</p>
+
+        <h2 id="popupTitle">YOUR LEVEL IS</h2>
+        <div id="popupLevelNumber" class="popup-level-number">1</div>
+
+        <p id="popupColorLevel" class="popup-color-level">
+            Light Color Level
+        </p>
+
+        <div class="popup-color-row">
+            <div id="popupColorSwatch" class="popup-color-swatch"></div>
+            <span class="swatch-caption">YOUR COLOR</span>
         </div>
 
-    </nav>
+        <div class="popup-spectrum">
+            <div id="popupSpectrumMarker"></div>
+        </div>
 
-    <main>
+        <div class="popup-spectrum-labels">
+            <span>LIGHT</span>
+            <span>DARK</span>
+        </div>
 
-        <h1>Game Information</h1>
+        <p class="popup-note">
+            Your color result is an estimate. Lighting can change the result.
+        </p>
 
-        <p>Find information about your favorite games.</p>
+        <button id="popupDone" class="cool-button popup-done">
+            AWESOME! ✦
+        </button>
+    </section>
+</div>
 
-        <button onclick="showMessage()">Explore Games</button>
-
-    </main>
-
-    <script src="script.js"></script>
-
+    <script type="module" src="script.js"></script>
 </body>
 </html>
